@@ -13,18 +13,18 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: ./.github/actions/cached-install
-        run: yarn lint
+      - run: yarn lint
   prettier:
     name: Format Check
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - uses: ./.github/actions/cached-install
-        run: yarn prettier
+      - run: yarn prettier
   test:
     name: Build and Test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - uses: ./.github/actions/cached-install
-        run: yarn test
+      - run: yarn test
