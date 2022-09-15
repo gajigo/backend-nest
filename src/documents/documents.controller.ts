@@ -19,16 +19,16 @@ export class DocumentsController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.documentsService.findOne(+id)
+    return this.documentsService.findOne(id)
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateDocumentDto: UpdateDocumentDto) {
-    return this.documentsService.update(+id, updateDocumentDto)
+    return this.documentsService.update(id, updateDocumentDto)
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.documentsService.remove(+id)
+    return this.documentsService.remove(id)
   }
 }

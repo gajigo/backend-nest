@@ -19,16 +19,16 @@ export class LecturesController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.lecturesService.findOne(+id)
+    return this.lecturesService.findOne(id)
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateLectureDto: UpdateLectureDto) {
-    return this.lecturesService.update(+id, updateLectureDto)
+    return this.lecturesService.update(id, updateLectureDto)
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.lecturesService.remove(+id)
+    return this.lecturesService.remove(id)
   }
 }

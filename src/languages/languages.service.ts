@@ -12,15 +12,15 @@ export class LanguagesService {
     return `This action returns all languages`
   }
 
-  findOne(id: number) {
+  findOne(id: string) {
     return `This action returns a #${id} language`
   }
 
-  update(id: number, updateLanguageDto: UpdateLanguageDto) {
+  update(id: string, updateLanguageDto: UpdateLanguageDto) {
     return `This action updates a #${id} language`
   }
 
-  remove(id: number) {
+  remove(id: string) {
     return `This action removes a #${id} language`
   }
 }

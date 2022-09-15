@@ -1,0 +1,32 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: dependencies
+    ports:
+      - 8080:3000
+    depends_on:
+      - postgres
+    volumes:
+      - .:/usr/src/app
+    command: yarn start:dev
+
+  postgres:
+    image: postgres
+    ports:
+      - ${DB_PORT}:5432
+    environment:
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_DATABASE}
+
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "test@email.com"
+      PGADMIN_DEFAULT_PASSWORD: "hunter2"
+    ports:
+      - 16543:80
+    depends_on:
+      - postgres
