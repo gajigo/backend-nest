@@ -1,5 +1,5 @@
-import { Lecture } from 'src/lectures/entities/lecture.entity'
-import { AbstractEntity } from 'src/types/entities/abstract.entity'
+import { Lecture } from '../../lectures/entities/lecture.entity'
+import { AbstractEntity } from '../../types/entities/abstract.entity'
 import { Entity, Column, ManyToMany } from 'typeorm'
 
 @Entity()

@@ -24,8 +24,8 @@ services:
   pgadmin:
     image: dpage/pgadmin4
     environment:
-      PGADMIN_DEFAULT_EMAIL: "test@email.com"
-      PGADMIN_DEFAULT_PASSWORD: "hunter2"
+      PGADMIN_DEFAULT_EMAIL: 'test@email.com'
+      PGADMIN_DEFAULT_PASSWORD: 'hunter2'
     ports:
       - 16543:80
     depends_on:

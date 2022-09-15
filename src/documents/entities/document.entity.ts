@@ -1,3 +1,3 @@
-import { AbstractEntity } from 'src/types/entities/abstract.entity'
+import { AbstractEntity } from '../../types/entities/abstract.entity'
 
 export class Document extends AbstractEntity {}

@@ -1,3 +1,3 @@
-import { AbstractEntityDto } from 'src/types/entities/abstract.entity'
+import { AbstractEntityDto } from '../../types/entities/abstract.entity'
 
 export class CreateLanguageDto extends AbstractEntityDto {}

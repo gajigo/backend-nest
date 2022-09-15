@@ -15,7 +15,7 @@ export abstract class AbstractEntity {
   @UpdateDateColumn({ type: 'timestamp with time zone', default: () => 'CURRENT_TIMESTAMP' })
   updated: Date
 
-  @DeleteDateColumn({ type: 'timestamp with time zone', default: () => null })
+  @DeleteDateColumn({ type: 'timestamp with time zone' })
   removed?: Date
 }
 

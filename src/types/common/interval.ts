@@ -1,9 +1,9 @@
 import { Column } from 'typeorm'
 
 export class Interval {
-  @Column()
+  @Column({ type: 'timestamp with time zone' })
   startDate: Date
 
-  @Column()
+  @Column({ type: 'timestamp with time zone' })
   endDate: Date
 }

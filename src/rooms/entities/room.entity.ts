@@ -1,6 +1,6 @@
-import { Event } from 'src/events/entities/event.entity'
-import { Lecture } from 'src/lectures/entities/lecture.entity'
-import { AbstractEntity } from 'src/types/entities/abstract.entity'
+import { Event } from '../../events/entities/event.entity'
+import { Lecture } from '../../lectures/entities/lecture.entity'
+import { AbstractEntity } from '../../types/entities/abstract.entity'
 import { Entity, Column, ManyToOne, OneToMany } from 'typeorm'
 
 @Entity()

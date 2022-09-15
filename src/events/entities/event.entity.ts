@@ -1,6 +1,6 @@
-import { Lecture } from 'src/lectures/entities/lecture.entity'
-import { Room } from 'src/rooms/entities/room.entity'
-import { AbstractEntity } from 'src/types/entities/abstract.entity'
+import { Lecture } from '../../lectures/entities/lecture.entity'
+import { Room } from '../../rooms/entities/room.entity'
+import { AbstractEntity } from '../../types/entities/abstract.entity'
 import { Entity, OneToMany } from 'typeorm'
 
 @Entity()
