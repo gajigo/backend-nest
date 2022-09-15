@@ -5,7 +5,7 @@ services:
       dockerfile: Dockerfile
       target: dependencies
     ports:
-      - 8080:3000
+      - ${PORT}:3000
     depends_on:
       - postgres
     volumes:
@@ -20,13 +20,3 @@ services:
       POSTGRES_USER: ${DB_USERNAME}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ${DB_DATABASE}
-
-  pgadmin:
-    image: dpage/pgadmin4
-    environment:
-      PGADMIN_DEFAULT_EMAIL: 'test@email.com'
-      PGADMIN_DEFAULT_PASSWORD: 'hunter2'
-    ports:
-      - 16543:80
-    depends_on:
-      - postgres

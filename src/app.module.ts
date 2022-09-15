@@ -10,11 +10,23 @@ import { RoomsModule } from './rooms/rooms.module'
 import { TagsModule } from './tags/tags.module'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { TypeOrmModule } from '@nestjs/typeorm'
+import { LoggerModule } from 'nestjs-pino'
 
 @Module({
   controllers: [AppController],
   providers: [AppService],
   imports: [
+    LoggerModule.forRoot({
+      pinoHttp: {
+        transport: {
+          target: 'pino-pretty',
+          options: {
+            singleLine: true,
+            colorize: true
+          }
+        }
+      }
+    }),
     ConfigModule.forRoot({ isGlobal: true, cache: true }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],

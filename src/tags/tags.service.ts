@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
+import { PaginationQuery, PaginationResponse } from 'src/types/common/pagination'
 import { Repository } from 'typeorm'
 import { CreateTagDto } from './dto/create-tag.dto'
 import { UpdateTagDto } from './dto/update-tag.dto'
@@ -9,23 +10,49 @@ import { Tag } from './entities/tag.entity'
 export class TagsService {
   constructor(@InjectRepository(Tag) private readonly tagsRepository: Repository<Tag>) {}
 
-  create(createTagDto: CreateTagDto) {
-    return this.tagsRepository.save(createTagDto)
+  async create(createTagDto: CreateTagDto) {
+    return await this.tagsRepository.save(createTagDto)
   }
 
-  findAll() {
-    return `This action returns all tags`
+  async findAll(query: PaginationQuery): Promise<PaginationResponse<Tag>> {
+    const { page, perPage } = query
+
+    const [result, total] = await this.tagsRepository.findAndCount({
+      withDeleted: false,
+      take: +perPage,
+      skip: page * perPage
+    })
+
+    return {
+      data: result,
+      page: {
+        perPage: +perPage,
+        totalItems: total,
+        totalPages: Math.ceil(total / perPage),
+        current: +page
+      }
+    }
   }
 
-  findOne(id: string) {
-    return `This action returns a #${id} tag`
+  async findOne(id: string) {
+    return await this.tagsRepository.findOne({ where: { id }, withDeleted: true })
   }
 
-  update(id: string, updateTagDto: UpdateTagDto) {
-    return `This action updates a #${id} tag`
+  async update(id: string, updateTagDto: UpdateTagDto) {
+    if (updateTagDto.removed != undefined) {
+      if (updateTagDto.removed) {
+        this.tagsRepository.softDelete(id)
+      } else {
+        this.tagsRepository.restore(id)
+      }
+
+      updateTagDto.removed = undefined
+    }
+
+    return await this.tagsRepository.update(id, updateTagDto)
   }
 
-  remove(id: string) {
-    return `This action removes a #${id} tag`
+  async remove(id: string) {
+    return await this.tagsRepository.delete(id)
   }
 }
