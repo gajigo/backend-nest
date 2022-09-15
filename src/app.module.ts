@@ -7,6 +7,7 @@ import { EventsModule } from './events/events.module'
 import { LecturesModule } from './lectures/lectures.module'
 import { LanguagesModule } from './languages/languages.module'
 import { RoomsModule } from './rooms/rooms.module'
+import { TagsModule } from './tags/tags.module';
 
 @Module({
   controllers: [AppController],
@@ -17,7 +18,8 @@ import { RoomsModule } from './rooms/rooms.module'
     EventsModule,
     LecturesModule,
     LanguagesModule,
-    RoomsModule
+    RoomsModule,
+    TagsModule
   ]
 })
 export class AppModule {}
