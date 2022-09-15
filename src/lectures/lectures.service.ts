@@ -12,15 +12,15 @@ export class LecturesService {
     return `This action returns all lectures`
   }
 
-  findOne(id: number) {
+  findOne(id: string) {
     return `This action returns a #${id} lecture`
   }
 
-  update(id: number, updateLectureDto: UpdateLectureDto) {
+  update(id: string, updateLectureDto: UpdateLectureDto) {
     return `This action updates a #${id} lecture`
   }
 
-  remove(id: number) {
+  remove(id: string) {
     return `This action removes a #${id} lecture`
   }
 }
