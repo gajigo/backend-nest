@@ -10,7 +10,7 @@ export class QueryErrorFilter extends BaseExceptionFilter {
     if (typeof detail === 'string' && detail.includes('already exists')) {
       const message = exception.table.split('_').join(' ') + ' with'
       exception = new BadRequestException(
-        (exception.detail as String)
+        (exception.detail as string)
           .replace('Key', message.charAt(0).toUpperCase() + message.slice(1))
           .replace('=', ' = ')
           .replaceAll('(', '"')

@@ -1,26 +1,45 @@
 import { Injectable } from '@nestjs/common'
+import { InjectRepository } from '@nestjs/typeorm'
+import { PaginationQuery, PaginationResponse } from 'src/types/common/pagination'
+import { paginatedSearch } from '../utils/pagination.utils'
+import { Repository } from 'typeorm'
 import { CreateLectureDto } from './dto/create-lecture.dto'
 import { UpdateLectureDto } from './dto/update-lecture.dto'
+import { Lecture } from './entities/lecture.entity'
 
 @Injectable()
 export class LecturesService {
-  create(createLectureDto: CreateLectureDto) {
-    return 'This action adds a new lecture'
+  constructor(
+    @InjectRepository(Lecture) private readonly lecturesRepository: Repository<Lecture>
+  ) {}
+
+  async create(createLectureDto: CreateLectureDto): Promise<Lecture> {
+    return await this.lecturesRepository.save(createLectureDto)
   }
 
-  findAll() {
-    return `This action returns all lectures`
+  async findAll(query: PaginationQuery): Promise<PaginationResponse<Lecture>> {
+    return await paginatedSearch(this.lecturesRepository, query, {})
   }
 
-  findOne(id: string) {
-    return `This action returns a #${id} lecture`
+  async findOne(id: string): Promise<Lecture> {
+    return await this.lecturesRepository.findOne({ where: { id }, withDeleted: true })
   }
 
-  update(id: string, updateLectureDto: UpdateLectureDto) {
-    return `This action updates a #${id} lecture`
+  async update(id: string, updateLectureDto: UpdateLectureDto) {
+    if (updateLectureDto.removed != undefined) {
+      if (updateLectureDto.removed) {
+        this.lecturesRepository.softDelete(id)
+      } else {
+        this.lecturesRepository.restore(id)
+      }
+
+      updateLectureDto.removed = undefined
+    }
+
+    return await this.lecturesRepository.update(id, updateLectureDto)
   }
 
-  remove(id: string) {
-    return `This action removes a #${id} lecture`
+  async remove(id: string) {
+    return await this.lecturesRepository.delete(id)
   }
 }

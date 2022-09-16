@@ -1,7 +1,18 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common'
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Query,
+  ParseUUIDPipe
+} from '@nestjs/common'
 import { LecturesService } from './lectures.service'
 import { CreateLectureDto } from './dto/create-lecture.dto'
 import { UpdateLectureDto } from './dto/update-lecture.dto'
+import { PaginationQuery } from '../types/common/pagination'
 
 @Controller('lectures')
 export class LecturesController {
@@ -13,22 +24,22 @@ export class LecturesController {
   }
 
   @Get()
-  findAll() {
-    return this.lecturesService.findAll()
+  findAll(@Query() query: PaginationQuery) {
+    return this.lecturesService.findAll(query)
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', ParseUUIDPipe) id: string) {
     return this.lecturesService.findOne(id)
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateLectureDto: UpdateLectureDto) {
+  update(@Param('id', ParseUUIDPipe) id: string, @Body() updateLectureDto: UpdateLectureDto) {
     return this.lecturesService.update(id, updateLectureDto)
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id', ParseUUIDPipe) id: string) {
     return this.lecturesService.remove(id)
   }
 }
