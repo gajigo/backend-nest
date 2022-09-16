@@ -10,7 +10,7 @@ import { Tag } from './entities/tag.entity'
 export class TagsService {
   constructor(@InjectRepository(Tag) private readonly tagsRepository: Repository<Tag>) {}
 
-  async create(createTagDto: CreateTagDto) {
+  async create(createTagDto: CreateTagDto): Promise<Tag> {
     return await this.tagsRepository.save(createTagDto)
   }
 
@@ -34,7 +34,7 @@ export class TagsService {
     }
   }
 
-  async findOne(id: string) {
+  async findOne(id: string): Promise<Tag> {
     return await this.tagsRepository.findOne({ where: { id }, withDeleted: true })
   }
 

@@ -5,12 +5,12 @@ import { UsersModule } from './users/users.module'
 import { DocumentsModule } from './documents/documents.module'
 import { EventsModule } from './events/events.module'
 import { LecturesModule } from './lectures/lectures.module'
-import { LanguagesModule } from './languages/languages.module'
 import { RoomsModule } from './rooms/rooms.module'
 import { TagsModule } from './tags/tags.module'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { LoggerModule } from 'nestjs-pino'
+import { TotemsModule } from './totems/totems.module'
 
 @Module({
   controllers: [AppController],
@@ -51,9 +51,9 @@ import { LoggerModule } from 'nestjs-pino'
     DocumentsModule,
     EventsModule,
     LecturesModule,
-    LanguagesModule,
     RoomsModule,
-    TagsModule
+    TagsModule,
+    TotemsModule
   ]
 })
 export class AppModule {}

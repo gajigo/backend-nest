@@ -1,26 +1,74 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, Logger } from '@nestjs/common'
+import { InjectRepository } from '@nestjs/typeorm'
+import { Lecture } from 'src/lectures/entities/lecture.entity'
+import { PaginationQuery, PaginationResponse } from 'src/types/common/pagination'
+import { Repository } from 'typeorm'
 import { CreateRoomDto } from './dto/create-room.dto'
 import { UpdateRoomDto } from './dto/update-room.dto'
+import { Room } from './entities/room.entity'
 
 @Injectable()
 export class RoomsService {
-  create(createRoomDto: CreateRoomDto) {
-    return 'This action adds a new room'
+  private readonly logger = new Logger(RoomsService.name)
+
+  constructor(@InjectRepository(Room) private readonly roomsRepository: Repository<Room>) {}
+
+  async create(createRoomDto: CreateRoomDto): Promise<Room> {
+    return await this.roomsRepository.save(createRoomDto)
   }
 
-  findAll() {
-    return `This action returns all rooms`
+  async findAll(query: PaginationQuery): Promise<PaginationResponse<Room>> {
+    const { page, perPage } = query
+
+    const [result, total] = await this.roomsRepository.findAndCount({
+      withDeleted: false,
+      take: +perPage,
+      skip: page * perPage
+    })
+
+    return {
+      data: result,
+      page: {
+        perPage: +perPage,
+        totalItems: total,
+        totalPages: Math.ceil(total / perPage),
+        current: +page
+      }
+    }
   }
 
-  findOne(id: string) {
-    return `This action returns a #${id} room`
+  async findOne(id: string): Promise<Room> {
+    return await this.roomsRepository.findOne({
+      where: { id },
+      withDeleted: true,
+      relations: ['lectures']
+    })
   }
 
-  update(id: string, updateRoomDto: UpdateRoomDto) {
+  async update(id: string, updateRoomDto: UpdateRoomDto) {
     return `This action updates a #${id} room`
   }
 
-  remove(id: string) {
+  async remove(id: string) {
     return `This action removes a #${id} room`
+  }
+
+  async getCurrentLecture(id: string): Promise<Lecture> {
+    console.log(id)
+    const room = await this.findOne(id)
+    const lecture = room.lectures.filter((lecture) => {
+      const { startDate, endDate } = lecture.interval
+      const now = new Date()
+
+      return startDate <= now && now <= endDate
+    })
+
+    if (lecture.length > 1) {
+      this.logger.error(
+        `Found Room ${room} with more than one Lecture scheduled for the same time period! Lectures: ${lecture}`
+      )
+    }
+
+    return lecture[0]
   }
 }
