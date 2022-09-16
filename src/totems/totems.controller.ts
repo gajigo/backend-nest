@@ -1,8 +1,7 @@
 import { Controller, Get, Post, Body, Delete, Query } from '@nestjs/common'
 import { TotemsService } from './totems.service'
 import { CheckInDto } from './dto/check-in.dto'
-import { CheckIn } from './entities/check-in.entity'
-import { PaginationQuery } from 'src/types/common/pagination'
+import { PaginatedTotemSearchQuery, TotemSearchQuery } from './types/search'
 
 @Controller('totems')
 export class TotemsController {
@@ -14,12 +13,12 @@ export class TotemsController {
   }
 
   @Delete()
-  checkOut(@Query() query: Partial<CheckIn>) {
+  checkOut(@Query() query: TotemSearchQuery) {
     return this.totemsService.checkOut(query)
   }
 
   @Get()
-  search(@Query() query: Partial<CheckIn> & PaginationQuery) {
+  search(@Query() query: PaginatedTotemSearchQuery) {
     return this.totemsService.search(query)
   }
 }

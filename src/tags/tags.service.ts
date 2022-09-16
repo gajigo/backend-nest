@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { PaginationQuery, PaginationResponse } from 'src/types/common/pagination'
+import { paginatedSearch } from '../utils/pagination.utils'
 import { Repository } from 'typeorm'
 import { CreateTagDto } from './dto/create-tag.dto'
 import { UpdateTagDto } from './dto/update-tag.dto'
@@ -15,23 +16,7 @@ export class TagsService {
   }
 
   async findAll(query: PaginationQuery): Promise<PaginationResponse<Tag>> {
-    const { page, perPage } = query
-
-    const [result, total] = await this.tagsRepository.findAndCount({
-      withDeleted: false,
-      take: +perPage,
-      skip: page * perPage
-    })
-
-    return {
-      data: result,
-      page: {
-        perPage: +perPage,
-        totalItems: total,
-        totalPages: Math.ceil(total / perPage),
-        current: +page
-      }
-    }
+    return await paginatedSearch(this.tagsRepository, query, {})
   }
 
   async findOne(id: string): Promise<Tag> {

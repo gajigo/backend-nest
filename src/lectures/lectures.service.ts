@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { PaginationQuery, PaginationResponse } from 'src/types/common/pagination'
+import { paginatedSearch } from '../utils/pagination.utils'
 import { Repository } from 'typeorm'
 import { CreateLectureDto } from './dto/create-lecture.dto'
 import { UpdateLectureDto } from './dto/update-lecture.dto'
@@ -17,23 +18,7 @@ export class LecturesService {
   }
 
   async findAll(query: PaginationQuery): Promise<PaginationResponse<Lecture>> {
-    const { page, perPage } = query
-
-    const [result, total] = await this.lecturesRepository.findAndCount({
-      withDeleted: false,
-      take: +perPage,
-      skip: page * perPage
-    })
-
-    return {
-      data: result,
-      page: {
-        perPage: +perPage,
-        totalItems: total,
-        totalPages: Math.ceil(total / perPage),
-        current: +page
-      }
-    }
+    return await paginatedSearch(this.lecturesRepository, query, {})
   }
 
   async findOne(id: string): Promise<Lecture> {

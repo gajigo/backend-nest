@@ -1,10 +1,12 @@
-import { Injectable } from '@nestjs/common'
+import { BadRequestException, Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { RoomsService } from '../rooms/rooms.service'
-import { PaginationQuery } from '../types/common/pagination'
+import { PaginationResponse } from '../types/common/pagination'
 import { Repository } from 'typeorm'
 import { CheckInDto } from './dto/check-in.dto'
 import { CheckIn } from './entities/check-in.entity'
+import { PaginatedTotemSearchQuery, TotemSearchQuery } from './types/search'
+import { paginatedSearch } from '../utils/pagination.utils'
 
 @Injectable()
 export class TotemsService {
@@ -15,44 +17,27 @@ export class TotemsService {
 
   async checkIn(checkInDto: CheckInDto) {
     const lecture = await this.roomsService.getCurrentLecture(checkInDto.room)
-    if (!lecture) return
+    if (!lecture)
+      throw new BadRequestException('expected room to have an ongoing lecture, but found none')
 
     return await this.checkInsRepository.save({ lecture: lecture.id, ...checkInDto })
   }
 
-  async checkOut(query: Partial<CheckIn>) {
+  async checkOut(query: TotemSearchQuery) {
     // Disable unfiltered delete as to not accidentaly wipe data
-    if (!Object.keys(query).length) return
+    if (!Object.keys(query).length)
+      throw new BadRequestException('deleting all check-in history is forbidden for safety reasons')
 
     return await this.checkInsRepository.delete(query)
   }
 
-  async search(query: Partial<CheckIn> & PaginationQuery) {
-    const { room, lecture, participant } = query
-    let { page, perPage } = query
+  async search(query: PaginatedTotemSearchQuery): Promise<PaginationResponse<CheckIn>> {
+    const { room, lecture, participant, page, perPage } = query
 
-    if (page === undefined) page = 0
-    if (perPage === undefined) perPage = 20
-
-    const [result, total] = await this.checkInsRepository.findAndCount({
-      where: {
-        room,
-        lecture,
-        participant
-      },
-      withDeleted: false,
-      take: +perPage,
-      skip: page * perPage
-    })
-
-    return {
-      data: result,
-      page: {
-        perPage: +perPage,
-        totalItems: total,
-        totalPages: Math.ceil(total / perPage),
-        current: +page
-      }
-    }
+    return await paginatedSearch(
+      this.checkInsRepository,
+      { page, perPage },
+      { room, lecture, participant }
+    )
   }
 }

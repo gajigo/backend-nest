@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Lecture } from 'src/lectures/entities/lecture.entity'
 import { PaginationQuery, PaginationResponse } from 'src/types/common/pagination'
+import { paginatedSearch } from '../utils/pagination.utils'
 import { Repository } from 'typeorm'
 import { CreateRoomDto } from './dto/create-room.dto'
 import { UpdateRoomDto } from './dto/update-room.dto'
@@ -18,23 +19,7 @@ export class RoomsService {
   }
 
   async findAll(query: PaginationQuery): Promise<PaginationResponse<Room>> {
-    const { page, perPage } = query
-
-    const [result, total] = await this.roomsRepository.findAndCount({
-      withDeleted: false,
-      take: +perPage,
-      skip: page * perPage
-    })
-
-    return {
-      data: result,
-      page: {
-        perPage: +perPage,
-        totalItems: total,
-        totalPages: Math.ceil(total / perPage),
-        current: +page
-      }
-    }
+    return await paginatedSearch(this.roomsRepository, query, {})
   }
 
   async findOne(id: string): Promise<Room> {
