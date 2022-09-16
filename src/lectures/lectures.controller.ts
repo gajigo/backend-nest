@@ -12,7 +12,7 @@ import {
 import { LecturesService } from './lectures.service'
 import { CreateLectureDto } from './dto/create-lecture.dto'
 import { UpdateLectureDto } from './dto/update-lecture.dto'
-import { PaginationQuery } from 'src/types/common/pagination'
+import { PaginationQuery } from '../types/common/pagination'
 
 @Controller('lectures')
 export class LecturesController {

@@ -46,7 +46,17 @@ export class RoomsService {
   }
 
   async update(id: string, updateRoomDto: UpdateRoomDto) {
-    return `This action updates a #${id} room`
+    if (updateRoomDto.removed != undefined) {
+      if (updateRoomDto.removed) {
+        this.roomsRepository.softDelete(id)
+      } else {
+        this.roomsRepository.restore(id)
+      }
+
+      updateRoomDto.removed = undefined
+    }
+
+    return await this.roomsRepository.update(id, updateRoomDto)
   }
 
   async remove(id: string) {

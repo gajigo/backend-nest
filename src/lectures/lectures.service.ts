@@ -41,10 +41,20 @@ export class LecturesService {
   }
 
   async update(id: string, updateLectureDto: UpdateLectureDto) {
-    return `This action updates a #${id} lecture`
+    if (updateLectureDto.removed != undefined) {
+      if (updateLectureDto.removed) {
+        this.lecturesRepository.softDelete(id)
+      } else {
+        this.lecturesRepository.restore(id)
+      }
+
+      updateLectureDto.removed = undefined
+    }
+
+    return await this.lecturesRepository.update(id, updateLectureDto)
   }
 
   async remove(id: string) {
-    return `This action removes a #${id} lecture`
+    return await this.lecturesRepository.delete(id)
   }
 }

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { RoomsService } from 'src/rooms/rooms.service'
-import { PaginationQuery } from 'src/types/common/pagination'
+import { RoomsService } from '../rooms/rooms.service'
+import { PaginationQuery } from '../types/common/pagination'
 import { Repository } from 'typeorm'
 import { CheckInDto } from './dto/check-in.dto'
 import { CheckIn } from './entities/check-in.entity'
@@ -28,7 +28,8 @@ export class TotemsService {
   }
 
   async search(query: Partial<CheckIn> & PaginationQuery) {
-    let { room, lecture, participant, page, perPage } = query
+    const { room, lecture, participant } = query
+    let { page, perPage } = query
 
     if (page === undefined) page = 0
     if (perPage === undefined) perPage = 20
