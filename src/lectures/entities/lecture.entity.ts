@@ -15,6 +15,6 @@ export class Lecture extends AbstractEntity {
   @IsObject()
   @ValidateNested()
   @Type(() => Interval)
-  @Column(() => Interval, { nullable: false })
+  @Column(() => Interval)
   interval: Interval
 }
