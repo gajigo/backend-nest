@@ -8,7 +8,8 @@ import { TagsModule } from './tags/tags.module'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { LoggerModule } from 'nestjs-pino'
-import { TotemsModule } from './totems/totems.module'
+import { CheckInsModule } from './check-ins/check-ins.module'
+import { LicensesModule } from './licenses/licenses.module'
 
 @Module({
   controllers: [AppController],
@@ -49,7 +50,8 @@ import { TotemsModule } from './totems/totems.module'
     LecturesModule,
     RoomsModule,
     TagsModule,
-    TotemsModule
+    CheckInsModule,
+    LicensesModule
   ]
 })
 export class AppModule {}

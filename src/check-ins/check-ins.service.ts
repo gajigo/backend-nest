@@ -5,11 +5,11 @@ import { PaginationResponse } from '../types/common/pagination'
 import { Repository } from 'typeorm'
 import { CheckInDto } from './dto/check-in.dto'
 import { CheckIn } from './entities/check-in.entity'
-import { PaginatedTotemSearchQuery, TotemSearchQuery } from './types/search'
-import { paginatedSearch } from '../utils/pagination.utils'
+import { PaginatedCheckInSearchQuery, CheckInSearchQuery } from './types/search'
+import { getPaginationOptions, getPaginationResult } from 'src/utils/pagination.utils'
 
 @Injectable()
-export class TotemsService {
+export class CheckInsService {
   constructor(
     @InjectRepository(CheckIn) private readonly checkInsRepository: Repository<CheckIn>,
     private readonly roomsService: RoomsService
@@ -23,21 +23,29 @@ export class TotemsService {
     return await this.checkInsRepository.save({ lecture: lecture.id, ...checkInDto })
   }
 
-  async checkOut(query: TotemSearchQuery) {
-    // Disable unfiltered delete as to not accidentaly wipe data
-    if (!Object.keys(query).length)
+  async checkOut(query: CheckInSearchQuery) {
+    if (Object.keys(query).length === 0)
       throw new BadRequestException('deleting all check-in history is forbidden for safety reasons')
 
     return await this.checkInsRepository.delete(query)
   }
 
-  async search(query: PaginatedTotemSearchQuery): Promise<PaginationResponse<CheckIn>> {
-    const { room, lecture, participant, page, perPage } = query
+  async search(query: PaginatedCheckInSearchQuery): Promise<PaginationResponse<CheckIn>> {
+    const { room, lecture, participant } = query
 
-    return await paginatedSearch(
-      this.checkInsRepository,
-      { page, perPage },
-      { room, lecture, participant }
-    )
+    const [result, total] = await this.checkInsRepository.findAndCount({
+      where: {
+        room,
+        lecture,
+        participant
+      },
+      withDeleted: false,
+      ...getPaginationOptions(query)
+    })
+
+    return {
+      data: result,
+      ...getPaginationResult(query, total)
+    }
   }
 }
