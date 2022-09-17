@@ -11,10 +11,10 @@ export class QueryErrorFilter extends BaseExceptionFilter {
       const message = exception.table.split('_').join(' ') + ' with'
       exception = new BadRequestException(
         (exception.detail as string)
-          .replace('Key', message)
+          .replace('Key', message.charAt(0).toUpperCase() + message.slice(1))
           .replace('=', ' = ')
-          .replaceAll('(', "'")
-          .replaceAll(')', "'")
+          .replaceAll('(', '"')
+          .replaceAll(')', '"')
       )
     }
 

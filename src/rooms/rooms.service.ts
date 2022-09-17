@@ -1,8 +1,8 @@
-import { BadRequestException, Injectable, Logger } from '@nestjs/common'
+import { Injectable, Logger } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Lecture } from 'src/lectures/entities/lecture.entity'
 import { PaginationQuery, PaginationResponse } from 'src/types/common/pagination'
-import { getPaginationOptions, getPaginationResult } from '../utils/pagination.utils'
+import { paginatedSearch } from '../utils/pagination.utils'
 import { Repository } from 'typeorm'
 import { CreateRoomDto } from './dto/create-room.dto'
 import { UpdateRoomDto } from './dto/update-room.dto'
@@ -19,15 +19,7 @@ export class RoomsService {
   }
 
   async findAll(query: PaginationQuery): Promise<PaginationResponse<Room>> {
-    const [result, total] = await this.roomsRepository.findAndCount({
-      withDeleted: false,
-      ...getPaginationOptions(query)
-    })
-
-    return {
-      data: result,
-      ...getPaginationResult(query, total)
-    }
+    return await paginatedSearch(this.roomsRepository, query, {})
   }
 
   async findOne(id: string): Promise<Room> {
@@ -57,12 +49,8 @@ export class RoomsService {
   }
 
   async getCurrentLecture(id: string): Promise<Lecture> {
+    console.log(id)
     const room = await this.findOne(id)
-
-    if (!room) {
-      throw new BadRequestException('room ${uuid} does not exist')
-    }
-
     const lecture = room.lectures.filter((lecture) => {
       const { startDate, endDate } = lecture.interval
       const now = new Date()
@@ -72,7 +60,7 @@ export class RoomsService {
 
     if (lecture.length > 1) {
       this.logger.error(
-        `Found Room ${room} with more than one Lecture scheduled for the same time period! Lectures: ${lecture}.`
+        `Found Room ${room} with more than one Lecture scheduled for the same time period! Lectures: ${lecture}`
       )
     }
 

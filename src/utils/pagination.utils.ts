@@ -1,18 +1,22 @@
 import { PaginationQuery } from 'src/types/common/pagination'
+import { FindOptionsWhere, Repository } from 'typeorm'
 
-export function getPaginationOptions(query: PaginationQuery) {
+export async function paginatedSearch<T>(
+  repository: Repository<T>,
+  query: PaginationQuery,
+  where: FindOptionsWhere<T>
+) {
   const { page, perPage } = query
 
-  return {
+  const [result, total] = await repository.findAndCount({
+    where,
+    withDeleted: false,
     take: +perPage,
     skip: page * perPage
-  }
-}
-
-export function getPaginationResult(query: PaginationQuery, total: number) {
-  const { page, perPage } = query
+  })
 
   return {
+    data: result,
     page: {
       perPage: +perPage,
       totalItems: total,

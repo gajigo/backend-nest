@@ -14,7 +14,9 @@ async function bootstrap() {
 
   app.useLogger(app.get(Logger))
   app.useGlobalFilters(new QueryErrorFilter(httpAdapter))
-  app.useGlobalPipes(new ValidationPipe({ transform: true }))
+  app.useGlobalPipes(
+    new ValidationPipe({ transform: true, transformOptions: { enableImplicitConversion: true } })
+  )
 
   await app.listen(3000)
 }
