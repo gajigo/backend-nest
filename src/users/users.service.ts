@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { PaginationQuery, PaginationResponse } from 'src/types/common/pagination'
-import { getPaginationOptions, getPaginationResult } from 'src/utils/pagination.utils'
+import { paginatedSearch } from '../utils/pagination.utils'
 import { Repository } from 'typeorm'
 import { CreateUserDto } from './dto/create-user.dto'
 import { UpdateUserDto } from './dto/update-user.dto'
@@ -16,15 +16,7 @@ export class UsersService {
   }
 
   async findAll(query: PaginationQuery): Promise<PaginationResponse<User>> {
-    const [result, total] = await this.usersRepository.findAndCount({
-      withDeleted: false,
-      ...getPaginationOptions(query)
-    })
-
-    return {
-      data: result,
-      ...getPaginationResult(query, total)
-    }
+    return await paginatedSearch(this.usersRepository, query, {})
   }
 
   async findOne(id: string): Promise<User> {

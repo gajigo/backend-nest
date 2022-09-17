@@ -3,27 +3,29 @@ import { getRepositoryToken } from '@nestjs/typeorm'
 import { RoomsService } from '../rooms/rooms.service'
 import { checkInMockRepositoryFactory } from '../../mocks/check-in.mock'
 import { CheckIn } from './entities/check-in.entity'
-import { CheckInsService } from './check-ins.service'
+import { TotemsController } from './totems.controller'
+import { TotemsService } from './totems.service'
 import { Room } from '../rooms/entities/room.entity'
 import { roomMockRepositoryFactory } from '../../mocks/room.mock'
 
-describe('CheckInsService', () => {
-  let service: CheckInsService
+describe('TotemsController', () => {
+  let controller: TotemsController
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
+      controllers: [TotemsController],
       providers: [
-        CheckInsService,
+        TotemsService,
         RoomsService,
         { provide: getRepositoryToken(CheckIn), useFactory: checkInMockRepositoryFactory },
         { provide: getRepositoryToken(Room), useFactory: roomMockRepositoryFactory }
       ]
     }).compile()
 
-    service = module.get<CheckInsService>(CheckInsService)
+    controller = module.get<TotemsController>(TotemsController)
   })
 
   it('should be defined', () => {
-    expect(service).toBeDefined()
+    expect(controller).toBeDefined()
   })
 })
