@@ -8,6 +8,7 @@ import { License } from './entities/license.entity'
 @Module({
   imports: [TypeOrmModule.forFeature([License, ModuleEntity])],
   controllers: [LicensesController],
-  providers: [LicensesService]
+  providers: [LicensesService],
+  exports: [LicensesService]
 })
 export class LicensesModule {}

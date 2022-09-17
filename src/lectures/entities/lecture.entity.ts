@@ -7,7 +7,7 @@ import { IsDefined, IsNotEmptyObject, IsObject, ValidateNested } from 'class-val
 
 @Entity()
 export class Lecture extends AbstractEntity {
-  @ManyToOne(() => Room, (room) => room.lectures)
+  @ManyToOne(() => Room, (room) => room.lectures, { nullable: false })
   room: Room
 
   @IsDefined()
@@ -15,6 +15,6 @@ export class Lecture extends AbstractEntity {
   @IsObject()
   @ValidateNested()
   @Type(() => Interval)
-  @Column(() => Interval)
+  @Column(() => Interval, { nullable: false })
   interval: Interval
 }

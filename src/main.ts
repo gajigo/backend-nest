@@ -13,8 +13,10 @@ async function bootstrap() {
   const { httpAdapter } = app.get(HttpAdapterHost)
 
   app.useLogger(app.get(Logger))
-  app.useGlobalFilters(new QueryErrorFilter(httpAdapter))
+
   app.useGlobalPipes(new ValidationPipe({ transform: true }))
+  app.useGlobalFilters(new QueryErrorFilter(httpAdapter))
+  app.setGlobalPrefix('api')
 
   await app.listen(3000)
 }

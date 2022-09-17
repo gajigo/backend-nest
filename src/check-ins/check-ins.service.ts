@@ -7,18 +7,21 @@ import { CheckInDto } from './dto/check-in.dto'
 import { CheckIn } from './entities/check-in.entity'
 import { PaginatedCheckInSearchQuery, CheckInSearchQuery } from './types/search'
 import { getPaginationOptions, getPaginationResult } from 'src/utils/pagination.utils'
+import { LicensesService } from 'src/licenses/licenses.service'
+import { Speaker } from './entities/speaker.entity'
 
 @Injectable()
 export class CheckInsService {
   constructor(
     @InjectRepository(CheckIn) private readonly checkInsRepository: Repository<CheckIn>,
-    private readonly roomsService: RoomsService
+    @InjectRepository(Speaker) private readonly speakersRepository: Repository<Speaker>,
+    private readonly roomsService: RoomsService,
+    private readonly licensesService: LicensesService
   ) {}
 
   async checkIn(checkInDto: CheckInDto) {
     const lecture = await this.roomsService.getCurrentLecture(checkInDto.room)
-    if (!lecture)
-      throw new BadRequestException('expected room to have an ongoing lecture, but found none')
+    if (!lecture) throw new BadRequestException('room does not have any currently ongoing lectures')
 
     return await this.checkInsRepository.save({ lecture: lecture.id, ...checkInDto })
   }
@@ -31,10 +34,11 @@ export class CheckInsService {
   }
 
   async search(query: PaginatedCheckInSearchQuery): Promise<PaginationResponse<CheckIn>> {
-    const { room, lecture, participant } = query
+    const { event, room, lecture, participant } = query
 
     const [result, total] = await this.checkInsRepository.findAndCount({
       where: {
+        event,
         room,
         lecture,
         participant

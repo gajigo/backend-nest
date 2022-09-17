@@ -1,27 +1,28 @@
-import { IsUUID } from 'class-validator'
+import { IsArray, IsUUID } from 'class-validator'
 import { AbstractEntity } from 'src/types/entities/abstract.entity'
-import { Column, Entity, Unique } from 'typeorm'
+import { Column, Entity, ManyToMany, Unique } from 'typeorm'
+import { Speaker } from './speaker.entity'
 
 @Entity()
-@Unique(['room', 'lecture', 'participant'])
+@Unique(['event', 'room', 'lecture', 'participant'])
 export class CheckIn extends AbstractEntity {
   @IsUUID()
-  @Column()
+  @Column({ nullable: false })
   event: string
 
   @IsUUID()
-  @Column()
+  @Column({ nullable: false })
   room: string
 
   @IsUUID()
-  @Column()
+  @Column({ nullable: false })
   lecture: string
 
   @IsUUID()
-  @Column()
+  @Column({ nullable: false })
   participant: string
 
-  @IsUUID()
-  @Column()
-  speaker: string
+  @IsArray()
+  @ManyToMany(() => Speaker, (speaker) => speaker.checkIns, { nullable: false })
+  speakers: Speaker[]
 }
