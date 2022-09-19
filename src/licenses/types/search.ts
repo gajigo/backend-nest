@@ -1,4 +1,4 @@
-import { IntersectionType, PartialType } from '@nestjs/mapped-types'
+import { IntersectionType, PartialType } from '@nestjs/swagger'
 import { PaginationQuery } from '../../types/common/pagination'
 import { LicenseDto } from '../dto/license.dto'
 

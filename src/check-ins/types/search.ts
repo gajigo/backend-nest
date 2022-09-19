@@ -1,4 +1,4 @@
-import { IntersectionType, OmitType, PartialType } from '@nestjs/mapped-types'
+import { IntersectionType, OmitType, PartialType } from '@nestjs/swagger'
 import { Transform } from 'class-transformer'
 import { IsArray, IsOptional, IsUUID } from 'class-validator'
 import { PaginationQuery } from '../../types/common/pagination'
