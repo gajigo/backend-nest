@@ -124,8 +124,11 @@ export class LicensesService {
     // Here, an undefined query is the same as allowing any results
     // If the user is not an admin, and is searching by event
     // ... we just let them, because event was verified to be theirs aready
-    // Otherwise, we filter by events the user owns
-    const eventQuery = this.isAdmin(user) ? event : event || (await this.getEventsOwnedByUser(user))
+    // Otherwise, we filter by events the user owns.
+    const eventQuery = this.isAdmin(user)
+      ? event
+      : // TODO Double check this works when I implement getEventsOwnedByUser
+        event || In(await this.getEventsOwnedByUser(user))
 
     const [result, total] = await this.modulesRepository.findAndCount({
       where: {
@@ -178,6 +181,6 @@ export class LicensesService {
     // GET /api/events?owner=user
     // This skeleton before I implement the method isn't actually very useful
     // ... since this will need to be a list, but it should do for now
-    return Not(IsNull())
+    return user.length > 0 ? [] : Not(IsNull())
   }
 }
