@@ -14,7 +14,13 @@ async function bootstrap() {
 
   app.useLogger(app.get(Logger))
 
-  app.useGlobalPipes(new ValidationPipe({ transform: true }))
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+      whitelist: true,
+      forbidNonWhitelisted: true
+    })
+  )
   app.useGlobalFilters(new QueryErrorFilter(httpAdapter))
   app.setGlobalPrefix('api')
 
