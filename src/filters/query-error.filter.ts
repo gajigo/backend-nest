@@ -1,4 +1,4 @@
-import { ArgumentsHost, BadRequestException, Catch } from '@nestjs/common'
+import { ArgumentsHost, Catch, ConflictException } from '@nestjs/common'
 import { BaseExceptionFilter } from '@nestjs/core'
 import { QueryFailedError } from 'typeorm'
 
@@ -9,7 +9,7 @@ export class QueryErrorFilter extends BaseExceptionFilter {
 
     if (typeof detail === 'string' && detail.includes('already exists')) {
       const message = exception.table.split('_').join(' ') + ' with'
-      exception = new BadRequestException(
+      exception = new ConflictException(
         (exception.detail as string)
           .replace('Key', message)
           .replace('=', ' = ')
