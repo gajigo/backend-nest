@@ -9,7 +9,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { LoggerModule } from 'nestjs-pino'
 import { CheckInsModule } from './check-ins/check-ins.module'
-import { LicensesModule } from './licenses/licenses.module'
+import { ModulesModule } from './modules/modules.module'
 
 @Module({
   controllers: [AppController],
@@ -51,7 +51,7 @@ import { LicensesModule } from './licenses/licenses.module'
     RoomsModule,
     TagsModule,
     CheckInsModule,
-    LicensesModule
+    ModulesModule
   ]
 })
 export class AppModule {}

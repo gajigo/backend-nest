@@ -60,7 +60,7 @@ export class RoomsService {
     const room = await this.findOne(id)
 
     if (!room) {
-      throw new BadRequestException('room ${uuid} does not exist')
+      throw new BadRequestException(`room ${id} does not exist`)
     }
 
     const lecture = room.lectures.filter((lecture) => {

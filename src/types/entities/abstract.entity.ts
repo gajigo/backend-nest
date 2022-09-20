@@ -5,7 +5,7 @@ import {
   UpdateDateColumn
 } from 'typeorm'
 
-export abstract class AbstractEntity {
+export class AbstractEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string
 
@@ -19,6 +19,6 @@ export abstract class AbstractEntity {
   removed?: Date
 }
 
-export abstract class AbstractEntityDto {
+export class AbstractEntityDto {
   removed?: boolean
 }

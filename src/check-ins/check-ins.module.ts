@@ -4,11 +4,11 @@ import { CheckInsController } from './check-ins.controller'
 import { RoomsModule } from 'src/rooms/rooms.module'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { CheckIn } from './entities/check-in.entity'
-import { LicensesModule } from 'src/licenses/licenses.module'
+import { ModulesModule } from '../modules/modules.module'
 import { Speaker } from './entities/speaker.entity'
 
 @Module({
-  imports: [TypeOrmModule.forFeature([CheckIn, Speaker]), RoomsModule, LicensesModule],
+  imports: [TypeOrmModule.forFeature([CheckIn, Speaker]), RoomsModule, ModulesModule],
   controllers: [CheckInsController],
   providers: [CheckInsService]
 })
