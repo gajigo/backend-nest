@@ -1,11 +1,23 @@
 import { IsUUID } from 'class-validator'
-import { AbstractEntity } from 'src/types/entities/abstract.entity'
-import { Column, Entity, ManyToOne, Unique } from 'typeorm'
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  Unique
+} from 'typeorm'
 import { Module } from './module.entity'
 
 @Entity()
 @Unique(['event', 'module'])
-export class License extends AbstractEntity {
+export class License {
+  @PrimaryGeneratedColumn('uuid')
+  id: string
+
+  @CreateDateColumn({ type: 'timestamp with time zone', default: () => 'CURRENT_TIMESTAMP' })
+  created: Date
+
   @ManyToOne(() => Module, (module) => module.licenses, { nullable: false, onDelete: 'CASCADE' })
   module: Module
 

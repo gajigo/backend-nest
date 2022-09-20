@@ -7,7 +7,7 @@ import { CheckInDto } from './dto/check-in.dto'
 import { CheckIn } from './entities/check-in.entity'
 import { PaginatedCheckInSearchQuery, CheckInSearchQuery } from './types/search'
 import { getPaginationOptions, getPaginationResult } from 'src/utils/pagination.utils'
-import { LicensesService } from 'src/licenses/licenses.service'
+import { ModulesService } from '../modules/modules.service'
 import { Speaker } from './entities/speaker.entity'
 
 @Injectable()
@@ -16,7 +16,7 @@ export class CheckInsService {
     @InjectRepository(CheckIn) private readonly checkInsRepository: Repository<CheckIn>,
     @InjectRepository(Speaker) private readonly speakersRepository: Repository<Speaker>,
     private readonly roomsService: RoomsService,
-    private readonly licensesService: LicensesService
+    private readonly modulesService: ModulesService
   ) {}
 
   async checkIn(checkInDto: CheckInDto) {
